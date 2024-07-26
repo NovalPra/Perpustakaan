@@ -1,0 +1,6 @@
+body {
+    font-family: 'Nunito', sans-serif;
+    -webkit-text-size-adjust: 100%; /* Dukungan untuk Safari */
+    text-size-adjust: 100%; /* Dukungan untuk browser lainnya */
+    background-color: #f0f0f0;
+}

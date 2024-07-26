@@ -1,6 +1,8 @@
 <?php
 
+use Faker\Guesser\Name;
 use Illuminate\Support\Facades\Route;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -13,9 +15,38 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('index');
+// Route::get('/', function () {
+//     return view('welcome')->name("home");
+// });
+Route::middleware("auth")->group(function () {
+    Route::view("/", "welcome")->name("home");
 });
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home'); 
+
+
+//Route untuk Login dan Register
+use App\Http\Controllers\LoginController;
+
+Route::get('/login', [LoginController::class, 'login'])->name('login');
+Route::post('/login', [LoginController::class, 'loginPost'])->name('login.post');
+Route::get('/register', [LoginController::class, 'register'])->name('register');
+Route::post('/register', [LoginController::class, 'registerPost'])->name('register.post');
+
+// Route::get('/login', 'LoginController@login')
+//     ->name("login");
+// Route::post('/login','LoginController@loginpost')
+//     ->name("login.post");
+
+// //Route untuk Register
+// Route::get('/register', 'LoginController@register')
+//     ->name("register");
+// Route::post('/register','LoginController@registerpost')
+//     ->name("register.post");
+
+
+
+
 
 //Route untuk Data Buku
 Route::get('/buku', 'BukuController@bukutampil');

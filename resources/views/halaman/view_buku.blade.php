@@ -1,141 +1,167 @@
+Updates to keyboard shortcuts … On Thursday, August 1, 2024, Drive keyboard shortcuts will be updated to give you first-letters navigation.Learn more
 @extends('index')
-@section('title', 'Daftar Buku')
+@section('title', 'Buku')
 
 @section('isihalaman')
-    <div class="container">
-        <h3 class="text-center">Daftar Buku Perpustakaan Universitas Amikom</h3>
-        
-        <!-- Tombol Tambah Data Buku -->
-        <button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#modalBukuTambah">Tambah Data Buku</button>
+    <h3><center>Daftar Buku Perpustakaan Universitas Semarang</center></h3>
+    
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalBukuTambah"> 
+        Tambah Data Buku 
+    </button>
 
-        <!-- Tabel Daftar Buku -->
-        <div class="table-responsive">
-            <table class="table table-bordered table-striped">
-                <thead>
-                    <tr>
-                        <th scope="col" class="text-center">No</th>
-                        <th scope="col" class="text-center">ID Buku</th>
-                        <th scope="col" class="text-center">Kode Buku</th>
-                        <th scope="col" class="text-center">Judul Buku</th>
-                        <th scope="col" class="text-center">Pengarang</th>
-                        <th scope="col" class="text-center">Kategori</th>
-                        <th scope="col" class="text-center">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($buku as $index => $bk)
-                        <tr>
-                            <td class="text-center" scope="row">{{ $index + $buku->firstItem() }}</td>
-                            <td>{{ $bk->id_buku }}</td>
-                            <td>{{ $bk->kode_buku }}</td>
-                            <td>{{ $bk->judul }}</td>
-                            <td>{{ $bk->pengarang }}</td>
-                            <td>{{ $bk->kategori }}</td>
-                            <td class="text-center">
-                                <!-- Tombol Edit -->
-                                <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#modalBukuEdit{{ $bk->id_buku }}">Edit</button>
+    <p>
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <td align="center">No</td>
+                <td align="center">ID Buku</td>
+                <td align="center">Kode Buku</td>
+                <td align="center">Judul Buku</td>
+                <td align="center">Pengarang</td>
+                <td align="center">Kategori</td>
+                <td align="center">Aksi</td>
+            </tr>
+        </thead>
 
-                                <!-- Modal Edit Data Buku -->
-                                <div class="modal fade" id="modalBukuEdit{{ $bk->id_buku }}" tabindex="-1" role="dialog" aria-labelledby="modalBukuEditLabel" aria-hidden="true">
-                                    <div class="modal-dialog" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="modalBukuEditLabel">Form Edit Data Buku</h5>
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
+        <tbody>
+            @foreach ($buku as $index=>$bk)
+                <tr>
+                    <td align="center" scope="row">{{ $index + $buku->firstItem() }}</td>
+                    <td>{{$bk->id_buku}}</td>
+                    <td>{{$bk->kode_buku}}</td>
+                    <td>{{$bk->judul}}</td>
+                    <td>{{$bk->pengarang}}</td>
+                    <td>{{$bk->kategori}}</td>
+                    <td align="center">
+                        
+                        <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#modalBukuEdit{{$bk->id_buku}}"> 
+                            Edit
+                        </button>
+                         <!-- Awal Modal EDIT data Buku -->
+                        <div class="modal fade" id="modalBukuEdit{{$bk->id_buku}}" tabindex="-1" role="dialog" aria-labelledby="modalBukuEditLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="modalBukuEditLabel">Form Edit Data Buku</h5>
+                                    </div>
+                                    <div class="modal-body">
+
+                                        <form name="formbukuedit" id="formbukuedit" action="/buku/edit/{{ $bk->id_buku}} " method="post" enctype="multipart/form-data">
+                                            @csrf
+                                            {{ method_field('PUT') }}
+                                            <div class="form-group row">
+                                                <label for="id_buku" class="col-sm-4 col-form-label">Kode Buku</label>
+                                                <div class="col-sm-8">
+                                                    <input type="text" class="form-control" id="kode_buku" name="kode_buku" placeholder="Masukan Kode Buku">
+                                                </div>
                                             </div>
-                                            <div class="modal-body">
-                                                <form action="/buku/edit/{{ $bk->id_buku }}" method="post" enctype="multipart/form-data">
-                                                    @csrf
-                                                    @method('PUT')
-                                                    <div class="form-group">
-                                                        <label for="kode_buku">Kode Buku</label>
-                                                        <input type="text" class="form-control" id="kode_buku" name="kode_buku" value="{{ $bk->kode_buku }}">
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label for="judul">Judul Buku</label>
-                                                        <input type="text" class="form-control" id="judul" name="judul" value="{{ $bk->judul }}">
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label for="pengarang">Nama Pengarang</label>
-                                                        <input type="text" class="form-control" id="pengarang" name="pengarang" value="{{ $bk->pengarang }}">
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label for="kategori">Kategori</label>
-                                                        <input type="text" class="form-control" id="kategori" name="kategori" value="{{ $bk->kategori }}">
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
-                                                        <button type="submit" class="btn btn-success">Simpan Perubahan</button>
-                                                    </div>
-                                                </form>
+
+                                            <p>
+                                            <div class="form-group row">
+                                                <label for="judul" class="col-sm-4 col-form-label">Judul Buku</label>
+                                                <div class="col-sm-8">
+                                                    <input type="text" class="form-control" id="judul" name="judul" value="{{ $bk->judul}}">
+                                                </div>
                                             </div>
-                                        </div>
+
+                                            <p>
+                                            <div class="form-group row">
+                                                <label for="pengarang" class="col-sm-4 col-form-label">Nama Pengarang</label>
+                                                <div class="col-sm-8">
+                                                    <input type="text" class="form-control" id="pengarang" name="pengarang" value="{{ $bk->pengarang}}">
+                                                </div>
+                                            </div>
+
+                                            <p>
+                                            <div class="form-group row">
+                                                <label for="kategori" class="col-sm-4 col-form-label">Kategori</label>
+                                                <div class="col-sm-8">
+                                                    <input type="text" class="form-control" id="kategori" name="kategori" value="{{ $bk->kategori}}">
+                                                </div>
+                                            </div>
+
+                                            <p>
+                                            <div class="modal-footer">
+                                                <button type="button" name="tutup" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                                                <button type="submit" name="bukutambah" class="btn btn-success">Edit</button>
+                                            </div>
+                                        </form>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                        <!-- Akhir Modal EDIT data buku -->
+                        |
+                        <a href="buku/hapus/{{$bk->id_buku}}" onclick="return confirm('Yakin mau dihapus?')">
+                            <button class="btn-danger">
+                                Delete
+                            </button>
+                        </a>
+                    </td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
 
-                                <!-- Tombol Hapus -->
-                                <form action="/buku/hapus/{{ $bk->id_buku }}" method="post" style="display: inline;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-danger" onclick="return confirm('Yakin mau dihapus?')">Hapus</button>
-                                </form>
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
+    <!--awal pagination-->
+    Halaman : {{ $buku->currentPage() }} <br />
+    Jumlah Data : {{ $buku->total() }} <br />
+    Data Per Halaman : {{ $buku->perPage() }} <br />
 
-        <!-- Pagination -->
-        <div class="mt-3">
-            Halaman: {{ $buku->currentPage() }} <br>
-            Jumlah Data: {{ $buku->total() }} <br>
-            Data Per Halaman: {{ $buku->perPage() }} <br>
+    {{ $buku->links() }}
+    <!--akhir pagination-->
 
-            {{ $buku->links() }}
-        </div>
-        <!-- Akhir Pagination -->
-
-        <!-- Modal Tambah Data Buku -->
-        <div class="modal fade" id="modalBukuTambah" tabindex="-1" role="dialog" aria-labelledby="modalBukuTambahLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="modalBukuTambahLabel">Form Tambah Data Buku</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <form action="/buku/tambah" method="post" enctype="multipart/form-data">
-                            @csrf
-                            <div class="form-group">
-                                <label for="kode_buku">Kode Buku</label>
+    <!-- Awal Modal tambah data Buku -->
+    <div class="modal fade" id="modalBukuTambah" tabindex="-1" role="dialog" aria-labelledby="modalBukuTambahLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalBukuTambahLabel">Form Input Data Buku</h5>
+                </div>
+                <div class="modal-body">
+                    <form name="formbukutambah" id="formbukutambah" action="/buku/tambah " method="post" enctype="multipart/form-data">
+                        @csrf
+                        <div class="form-group row">
+                            <label for="id_buku" class="col-sm-4 col-form-label">Kode Buku</label>
+                            <div class="col-sm-8">
                                 <input type="text" class="form-control" id="kode_buku" name="kode_buku" placeholder="Masukan Kode Buku">
                             </div>
-                            <div class="form-group">
-                                <label for="judul">Judul Buku</label>
+                        </div>
+
+                        <p>
+                        <div class="form-group row">
+                            <label for="judul" class="col-sm-4 col-form-label">Judul Buku</label>
+                            <div class="col-sm-8">
                                 <input type="text" class="form-control" id="judul" name="judul" placeholder="Masukan Judul Buku">
                             </div>
-                            <div class="form-group">
-                                <label for="pengarang">Nama Pengarang</label>
+                        </div>
+
+                        <p>
+                        <div class="form-group row">
+                            <label for="pengarang" class="col-sm-4 col-form-label">Nama Pengarang</label>
+                            <div class="col-sm-8">
                                 <input type="text" class="form-control" id="pengarang" name="pengarang" placeholder="Masukan Nama Pengarang">
                             </div>
-                            <div class="form-group">
-                                <label for="kategori">Kategori</label>
+                        </div>
+
+                        <p>
+                        <div class="form-group row">
+                            <label for="kategori" class="col-sm-4 col-form-label">Kategori</label>
+                            <div class="col-sm-8">
                                 <input type="text" class="form-control" id="kategori" name="kategori" placeholder="Masukan Kategori">
                             </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
-                                <button type="submit" class="btn btn-success">Tambah Buku</button>
-                            </div>
-                        </form>
-                    </div>
+                        </div>
+
+                        <p>
+                        <div class="modal-footer">
+                            <button type="button" name="tutup" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                            <button type="submit" name="bukutambah" class="btn btn-success">Tambah</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
-        <!-- Akhir Modal Tambah Data Buku -->
     </div>
+    <!-- Akhir Modal tambah data buku -->
+    
 @endsection
