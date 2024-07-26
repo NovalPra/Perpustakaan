@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 //     return view('welcome')->name("home");
 // });
 Route::middleware("auth")->group(function () {
-    Route::view("/", "welcome")->name("home");
+    Route::view("/", "halaman.register")->name("home");
 });
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home'); 
